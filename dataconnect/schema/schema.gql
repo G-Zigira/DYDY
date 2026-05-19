@@ -1,0 +1,34 @@
+type User @table {
+  displayName: String!
+  email: String!
+  createdAt: Timestamp!
+  photoUrl: String
+  lastLogin: Timestamp
+}
+
+type FinancialGoal @table {
+  user: User!
+  name: String!
+  targetAmount: Float!
+  targetDate: Date!
+  createdAt: Timestamp!
+  description: String
+  currentAmount: Float
+}
+
+type Asset @table {
+  user: User!
+  name: String!
+  type: String!
+  currentValue: Float!
+  createdAt: Timestamp!
+  description: String
+  lastUpdated: Timestamp
+}
+
+type Advice @table {
+  title: String!
+  content: String!
+  category: String!
+  sourceUrl: String
+}

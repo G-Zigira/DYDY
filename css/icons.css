@@ -1,0 +1,333 @@
+/* ============================================================
+   DYDY AI — icons.css
+   Global fix for custom SVG icons in nav + all other slots.
+
+   HOW YOUR HTML IS STRUCTURED (what we're fixing):
+   ─────────────────────────────────────────────────
+   <div class="nav-icon-wrap">
+     <i data-lucide="layout-dashboard">   ← Lucide tries to replace this
+       <div class="icon-box">
+         <img src="icons/home.svg" />     ← YOUR actual icon
+       </div>
+     </i>
+   </div>
+
+   PROBLEMS:
+   1. Lucide replaces the <i> content with its own SVG, hiding your image
+   2. Your image has no color filter so it stays black in dark mode
+   3. The icon-box has no centering styles
+
+   SOLUTION:
+   • Suppress Lucide's SVG output inside nav-icon-wrap
+   • Style icon-box to center properly
+   • Apply CSS filter to tint the image gold (active) or grey (inactive)
+     — this works on any single-colour SVG or PNG with transparency
+   ============================================================ */
+
+
+/* ── 1. SUPPRESS LUCIDE inside nav so your images show ───── */
+
+/* Hide the SVG that Lucide injects when your img is present  */
+.nav-icon-wrap > i[data-lucide] > svg {
+  display: none;
+}
+
+/* Also hide the <i> element's own rendering — we only want
+   what's inside .icon-box                                    */
+.nav-icon-wrap > i[data-lucide] {
+  display: contents; /* makes the <i> invisible but keeps children */
+}
+
+
+/* ── 2. ICON BOX — centering ─────────────────────────────── */
+
+.icon-box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Inherit the nav-icon-wrap size so it fills the gold circle */
+}
+
+/* The nav-icon-wrap is 34×34px per layout.css — make sure
+   icon-box fills it completely                               */
+.nav-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Existing size/radius from components.css is kept */
+}
+
+.icon-box img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: block;
+  /* Default (inactive, dark mode): muted grey                */
+  filter: var(--icon-filter-inactive);
+  transition: filter 0.2s ease;
+}
+
+
+/* ── 3. COLOUR FILTERS per theme + state ─────────────────── */
+
+/*
+  CSS filter cheat-sheet for solid-colour SVGs:
+  ─────────────────────────────────────────────
+  White   : brightness(0) invert(1)
+  Black   : brightness(0)
+  Gold    : brightness(0) saturate(100%) invert(72%) sepia(60%)
+              saturate(500%) hue-rotate(5deg) brightness(95%)
+  Blue    : brightness(0) saturate(100%) invert(40%) sepia(90%)
+              saturate(600%) hue-rotate(200deg) brightness(100%)
+  Grey    : brightness(0) invert(60%)
+*/
+
+/* DARK MODE — inactive: soft grey */
+[data-theme="dark"] {
+  --icon-filter-inactive : brightness(0) invert(55%);
+  --icon-filter-active   : brightness(0) saturate(100%) invert(72%)
+                           sepia(60%) saturate(500%)
+                           hue-rotate(5deg) brightness(95%);
+                           /* → gold #d4a943 */
+  --icon-filter-active-bg: rgba(212, 169, 67, 0.08);
+}
+
+/* LIGHT MODE — inactive: dark grey */
+[data-theme="light"] {
+  --icon-filter-inactive : brightness(0) invert(35%);
+  --icon-filter-active   : brightness(0) saturate(100%) invert(35%)
+                           sepia(90%) saturate(600%)
+                           hue-rotate(200deg) brightness(100%);
+                           /* → blue #1a6ef5 */
+  --icon-filter-active-bg: rgba(26, 110, 245, 0.08);
+}
+
+/* Apply inactive filter by default */
+.nav-item .icon-box img {
+  filter: var(--icon-filter-inactive);
+}
+
+/* Active nav item: gold (dark) or blue (light) icon */
+.nav-item.active .icon-box img {
+  filter: var(--icon-filter-active);
+}
+
+/* Hover: brighten slightly */
+.nav-item:hover .icon-box img {
+  filter: var(--icon-filter-inactive) brightness(1.4);
+}
+
+
+/* ── 4. ACTIVE NAV ICON WRAP background ─────────────────── */
+
+/* Override the background set in layout.css for active state */
+[data-theme="dark"] .nav-item.active .nav-icon-wrap {
+  background: rgba(212, 169, 67, 0.15);
+  box-shadow: 0 0 12px rgba(212, 169, 67, 0.2);
+}
+
+[data-theme="light"] .nav-item.active .nav-icon-wrap {
+  background: rgba(26, 110, 245, 0.12);
+  box-shadow: 0 0 12px rgba(26, 110, 245, 0.15);
+}
+
+
+/* ── 5. MOBILE NAV — same treatment ─────────────────────── */
+
+/* Mobile nav items use <i data-lucide> directly (no icon-box).
+   If you add icon-box there too, this handles it:             */
+.mob-nav-item .icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mob-nav-item .icon-box img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  filter: var(--icon-filter-inactive);
+  transition: filter 0.2s ease;
+}
+
+.mob-nav-item.active .icon-box img {
+  filter: var(--icon-filter-active);
+}
+
+.mob-nav-item:hover .icon-box img {
+  filter: var(--icon-filter-inactive) brightness(1.4);
+}
+
+/* Center button (DYDY) — white icon on gold/blue background  */
+.mob-nav-item.mob-center .icon-box img {
+  width: 22px;
+  height: 22px;
+  filter: brightness(0) invert(1); /* always white */
+}
+
+
+/* ── 6. SUPPRESS LUCIDE GLOBALLY where icon-box is present ─
+   If any other part of the app uses the same icon-box
+   pattern inside a data-lucide element, this handles it.     */
+
+[data-lucide]:has(.icon-box) > svg {
+  display: none;
+}
+
+[data-lucide]:has(.icon-box) {
+  display: contents;
+}
+
+
+/* ── 7. QUICK REFERENCE — how to use in each nav item ───────
+
+   BEFORE (current, broken):
+   ─────────────────────────
+   <i data-lucide="layout-dashboard">
+     <div class="icon-box">
+       <img src="icons/home.svg" alt="" width="26" height="26" />
+     </div>
+   </i>
+
+   AFTER (recommended clean version — no Lucide conflict):
+   ────────────────────────────────────────────────────────
+   Replace the entire <i data-lucide="..."> wrapper with just:
+
+   <div class="icon-box">
+     <img src="icons/home.svg" alt="Accueil" />
+   </div>
+
+   The .nav-icon-wrap parent already handles the 34×34 circle.
+   You do NOT need the <i data-lucide> wrapper at all once you
+   have real icon images — just keep the .nav-icon-wrap div and
+   put .icon-box directly inside it:
+
+   <div class="nav-icon-wrap">
+     <div class="icon-box">
+       <img src="icons/home.svg" alt="Accueil" />
+     </div>
+   </div>
+
+   This file will keep working either way.
+   ──────────────────────────────────────────────────────── */
+
+
+/* ============================================================
+   RESOURCE CARD IMAGES
+   ─────────────────────────────────────────────────────────
+   Usage:
+   <div class="resource-thumb-wrap">
+     <img src="YOUR_URL" alt="description" class="resource-img" />
+   </div>
+
+   Optional overlay badge:
+   <div class="resource-thumb-wrap">
+     <img src="YOUR_URL" alt="description" class="resource-img" />
+     <div class="resource-thumb-badge">5 min</div>
+   </div>
+   ============================================================ */
+
+.resource-thumb-wrap {
+  width: 100%;
+  height: 130px;
+  position: relative;
+  overflow: hidden;
+  /* Smooth top corners matching the parent card */
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  background: var(--bg-hover); /* fallback while image loads */
+  flex-shrink: 0;
+}
+
+.resource-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+/* Zoom on card hover */
+.resource-card:hover .resource-img {
+  transform: scale(1.05);
+}
+
+/* Dark gradient scrim at the bottom so text stays readable
+   if you ever overlay text on the image */
+.resource-thumb-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(to top, rgba(0,0,0,0.45), transparent);
+  pointer-events: none;
+}
+
+/* Optional badge (reading time, category, etc.) */
+.resource-thumb-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: var(--gold-500);
+  color: #000;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  z-index: 2;
+}
+
+[data-theme="light"] .resource-thumb-badge {
+  background: var(--blue-500);
+  color: #fff;
+}
+
+/* Category tag (top-left of image) */
+.resource-thumb-tag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+/* ── Placeholder (keep showing when no image yet) ── */
+.resource-thumb-placeholder {
+  width: 100%;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .resource-thumb-placeholder {
+  background: linear-gradient(135deg, #0d1020, #1a1408);
+}
+
+[data-theme="light"] .resource-thumb-placeholder {
+  background: linear-gradient(135deg, #e8f0ff, #f0f4ff);
+}
+
+.resource-thumb-placeholder [data-lucide],
+.resource-thumb-placeholder svg {
+  width: 28px;
+  height: 28px;
+  opacity: 0.5;
+}
+
+[data-theme="dark"]  .resource-thumb-placeholder [data-lucide] { color: var(--gold-400); }
+[data-theme="light"] .resource-thumb-placeholder [data-lucide] { color: var(--blue-400); }

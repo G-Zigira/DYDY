@@ -1,0 +1,39 @@
+query ListAllAdvice @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  advices {
+    id
+    title
+    content
+    category
+    sourceUrl
+  }
+}
+
+query GetMyFinancialGoals @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  financialGoals(where: {userId: {eq_expr: "auth.uid"}}) {
+    id
+    name
+    targetAmount
+    currentAmount
+    targetDate
+  }
+}
+
+mutation CreateAsset($name: String!, $type: String!, $currentValue: Float!, $description: String) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  asset_insert(data: {
+    userId_expr: "auth.uid",
+    name: $name,
+    type: $type,
+    currentValue: $currentValue,
+    description: $description,
+    createdAt_expr: "request.time",
+    lastUpdated_expr: "request.time"
+  })
+}
+
+mutation UpdateMyUserProfile($displayName: String, $photoUrl: String) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  user_update(key: {id_expr: "auth.uid"}, data: {
+    displayName: $displayName,
+    photoUrl: $photoUrl,
+    lastLogin_expr: "request.time"
+  })
+}

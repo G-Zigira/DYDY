@@ -1,0 +1,106 @@
+/* ============================================================
+   DYDY AI — Design Tokens
+   Dark mode: deep black + midnight navy + gold
+   Light mode: white + sky blue (unchanged)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
+/* ── Dark mode (default) ──────────────────────────────────── */
+:root {
+  /* Blacks & deep navies */
+  --bg-base:        #05060a;
+  --bg-surface:     #080b12;
+  --bg-card:        #0b0f1a;
+  --bg-card-raised: #0f1422;
+  --bg-input:       #0d1120;
+  --bg-hover:       #141926;
+
+  /* Navy accent (used sparingly for depth) */
+  --navy-border:    rgba(20, 40, 90, 0.6);
+  --navy-glow:      rgba(15, 30, 80, 0.4);
+
+  /* Gold — primary accent in dark mode */
+  --gold-600: #b8892a;
+  --gold-500: #d4a943;
+  --gold-400: #e2bc6b;
+  --gold-300: #f0d48a;
+  --gold-100: rgba(212, 169, 67, 0.08);
+  --gold-glow: rgba(212, 169, 67, 0.25);
+  --gold-border: rgba(212, 169, 67, 0.22);
+
+  /* Blue — secondary accent */
+  --blue-600: #1249b8;
+  --blue-500: #1a6ef5;
+  --blue-400: #3b82f6;
+  --blue-300: #60a5fa;
+  --blue-100: rgba(26, 110, 245, 0.08);
+  --blue-glow: rgba(26, 110, 245, 0.3);
+  --blue-border: rgba(26, 110, 245, 0.2);
+
+  /* Text */
+  --text-primary:   #f0f4ff;
+  --text-secondary: #7a8aaa;
+  --text-muted:     #3d4d6a;
+  --text-gold:      var(--gold-400);
+  --text-blue:      var(--blue-300);
+
+  /* Cards & borders */
+  --card-bg:        rgba(11, 15, 26, 0.92);
+  --card-border:    rgba(26, 110, 245, 0.12);
+  --card-border-gold: var(--gold-border);
+  --card-shadow:    0 4px 32px rgba(0, 0, 0, 0.6);
+  --card-shadow-gold: 0 4px 32px rgba(212, 169, 67, 0.1);
+
+  /* Sidebar */
+  --sidebar-bg:     #060810;
+  --sidebar-border: rgba(212, 169, 67, 0.1);
+  --topbar-bg:      rgba(6, 8, 16, 0.95);
+
+  /* Dimensions */
+  --sidebar-width: 256px;
+  --nav-height:    68px;
+
+  /* Radius */
+  --r-sm:  8px;
+  --r-md:  12px;
+  --r-lg:  18px;
+  --r-xl:  24px;
+  --r-2xl: 32px;
+
+  /* Transitions */
+  --t-fast:   0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --t-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --t-slow:   0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Light mode overrides ─────────────────────────────────── */
+[data-theme="light"] {
+  --bg-base:        #f4f7ff;
+  --bg-surface:     #eaf0fb;
+  --bg-card:        rgba(255, 255, 255, 0.95);
+  --bg-card-raised: #ffffff;
+  --bg-input:       #f0f5ff;
+  --bg-hover:       #e2ecff;
+
+  --navy-border:    rgba(26, 110, 245, 0.15);
+  --navy-glow:      rgba(26, 110, 245, 0.08);
+
+  --gold-100: rgba(212, 169, 67, 0.06);
+  --gold-border: rgba(212, 169, 67, 0.18);
+
+  --blue-100: rgba(26, 110, 245, 0.07);
+  --blue-border: rgba(26, 110, 245, 0.18);
+
+  --text-primary:   #0a0f1e;
+  --text-secondary: #3a4a6e;
+  --text-muted:     #8a9bbf;
+
+  --card-bg:        rgba(255, 255, 255, 0.95);
+  --card-border:    rgba(26, 110, 245, 0.14);
+  --card-shadow:    0 4px 24px rgba(10, 15, 40, 0.08);
+
+  --sidebar-bg:     #ffffff;
+  --sidebar-border: rgba(26, 110, 245, 0.1);
+  --topbar-bg:      rgba(255, 255, 255, 0.96);
+}

@@ -1,0 +1,69 @@
+mutation CreateDemoData @transaction @auth(level: USER, insecureReason: "Seed data mutation for demo purposes. Safe to expose to all logged in users.") {
+  user_insertMany(data: [
+    {
+      id: "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      displayName: "John Doe",
+      email: "john.doe@example.com",
+      createdAt: "2023-01-01T10:00:00Z"
+    },
+    {
+      id: "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+      displayName: "Jane Smith",
+      email: "jane.smith@example.com",
+      createdAt: "2023-01-02T11:00:00Z"
+    }
+  ])
+  advice_insertMany(data: [
+    {
+      title: "Start a Budget",
+      content: "Create a detailed budget to track your income and expenses.",
+      category: "Financial Planning"
+    },
+    {
+      title: "Invest Early",
+      content: "The sooner you start investing, the more time your money has to grow.",
+      category: "Investing"
+    }
+  ])
+  asset_insertMany(data: [
+    {
+      userId: "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      name: "Savings Account",
+      type: "Bank Account",
+      currentValue: 5000.00,
+      createdAt: "2023-01-01T10:30:00Z"
+    },
+    {
+      userId: "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      name: "Investment Portfolio",
+      type: "Stocks",
+      currentValue: 10000.00,
+      createdAt: "2023-01-15T12:00:00Z"
+    },
+    {
+      userId: "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+      name: "Emergency Fund",
+      type: "Bank Account",
+      currentValue: 3000.00,
+      createdAt: "2023-01-03T09:00:00Z"
+    }
+  ])
+  financialGoal_insertMany(data: [
+    {
+      userId: "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      name: "Down Payment for House",
+      targetAmount: 50000.00,
+      targetDate: "2025-12-31",
+      createdAt: "2023-02-01T14:00:00Z",
+      currentAmount: 15000.00
+    },
+    {
+      userId: "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+      name: "Retirement Savings",
+      targetAmount: 1000000.00,
+      targetDate: "2040-06-30",
+      createdAt: "2023-01-05T16:00:00Z",
+      currentAmount: 50000.00
+    }
+  ])
+}

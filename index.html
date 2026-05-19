@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DYDY AI — Votre Conseiller Financier</title>
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/icons.css" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.383.0/umd/lucide.min.js" defer></script>
+  <style>
+    [data-lucide]{display:inline-block;vertical-align:middle}
+    .nav-icon-wrap [data-lucide]{width:17px;height:17px}
+    .icon-btn [data-lucide]{width:16px;height:16px}
+    .btn [data-lucide]{width:14px;height:14px}
+    .stat-icon-wrap [data-lucide]{width:19px;height:19px}
+    .mob-nav-item [data-lucide]{width:22px;height:22px;display:block}
+    .mob-nav-item.mob-center [data-lucide]{width:22px;height:22px}
+    .resource-thumb-placeholder [data-lucide]{width:28px;height:28px}
+    .resource-time [data-lucide]{width:11px;height:11px}
+    .goal-name [data-lucide]{width:13px;height:13px}
+    .banner-eyebrow [data-lucide]{width:12px;height:12px}
+    .dydy-avatar-icon [data-lucide]{width:24px;height:24px}
+    .ai-msg-avatar-icon [data-lucide]{width:14px;height:14px}
+    .type-option [data-lucide]{width:24px;height:24px;margin-bottom:6px}
+    .theme-btn [data-lucide]{width:16px;height:16px}
+    .section-title [data-lucide]{width:15px;height:15px}
+    .conv-avatar [data-lucide]{width:16px;height:16px}
+    /* IMAGE PLACEHOLDER HIGHLIGHT
+       Gold dashed outline + label tag on every .img-slot element.
+       Remove this block (and .img-slot classes in HTML) once real
+       images are placed. */
+    .img-slot{position:relative;outline:2px dashed var(--gold-500)!important;outline-offset:-2px}
+    .img-slot::before{content:attr(data-img-label);position:absolute;top:5px;left:5px;background:var(--gold-500);color:#000;font-size:.58rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:2px 7px;border-radius:4px;z-index:10;pointer-events:none;white-space:nowrap}
+    @media(max-width:768px){.img-slot::before{font-size:.5rem;padding:1px 5px}}
+  </style>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+
+<!-- NOTIFICATION PANEL -->
+<div id="notif-panel" class="notif-panel">
+  
+  <div class="notif-header">Notifications <span style="color:var(--text-muted);font-weight:400;font-size:.72rem">
+    <div class="icon-box">
+                  <img src="assets/images/../icons/notifi.svg" alt="" width="26" height="26" />
+                </div>
+  </span></div>
+  <div style="padding:22px;text-align:center;color:var(--text-muted);font-size:.82rem">Connectez-vous pour voir vos notifications</div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="login-modal" class="login-modal" onclick="closeLoginIfBackdrop(event)">
+  <div class="login-card">
+    <button class="login-close" onclick="closeLoginModal()"><i data-lucide="x"></i></button>
+
+    <!-- LOGO — swap wordmark for <img src="assets/images/logo.png"> when ready -->
+    <div class="login-logo">
+      <div class="logo-wordmark" style="font-size:2rem"><span class="logo-dydy">DYDY</span><span class="logo-ai">AI</span></div>
+      <div class="logo-tagline" style="text-align:center;margin-top:4px">L'avenir du conseil financier</div>
+    </div>
+
+    <div class="login-divider-text">Connectez-vous pour continuer</div>
+
+    <button class="btn-google-full" id="modal-google-btn" onclick="signInWithGoogle()">
+      <svg width="20" height="20" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/></svg>
+      Continuer avec Google
+    </button>
+
+    <div class="login-terms">En vous connectant, vous acceptez les <a href="#" style="color:var(--gold-400)">conditions d'utilisation</a> et la <a href="#" style="color:var(--gold-400)">politique de confidentialité</a> de DYDY AI.</div>
+
+    <div class="login-advisor-badge">
+      <!-- IMAGE SLOT: swap for <img src="assets/images/handy-headshot.jpg"> -->
+      <div class="img-slot" data-img-label="Handy photo" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold-500),var(--blue-500));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:#fff;flex-shrink:0">HV</div>
+      <div><div style="font-size:.78rem;font-weight:600">Handy Verna</div><div style="font-size:.68rem;color:var(--text-muted)">Conseiller Financier Certifié · DYDY AI</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <!-- IMAGE SLOT (desktop): swap wordmark for logo image -->
+    <div class="sidebar-logo">
+      <div class="logo-wordmark"><span class="logo-dydy">DYDY</span><span class="logo-ai">AI</span></div>
+      <div class="logo-tagline">L'avenir du conseil financier</div>
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+      <div class="nav-item active" data-page="home"><div class="nav-icon-wrap"><i data-lucide="layout-dashboard">
+            <div class="icon-box">
+                  <img src="assets/images/../icons/home.svg" alt="" width="26" height="26" />
+                </div>
+      </i></div><span class="nav-label">
+        
+        Accueil</span></div>
+      <div class="nav-item" data-page="messages"><div class="nav-icon-wrap"><i data-lucide="message-square">
+            <div class="icon-box">
+                  <img src="assets/images/../icons/msg.svg" alt="" width="26" height="26" />
+                </div>
+      </i></div><span class="nav-label">Messages</span><span class="nav-badge" id="sidebar-badge" style="display:none">0</span></div>
+      <div class="nav-item" data-page="dydy"><div class="nav-icon-wrap"><i data-lucide="bot">
+            <div class="">
+                  <img src="assets/images/../images/facecard.jpeg" alt="" width="26" height="26" />
+                </div>
+      </i></div><span class="nav-label">DYDY</span></div>
+      <div class="nav-item" data-page="meetings"><div class="nav-icon-wrap"><i data-lucide="calendar">
+        <div class="icon-box">
+                  <img src="assets/images/../icons/calender.svg" alt="" width="26" height="26" />
+                </div>
+      </i></div><span class="nav-label">Rendez-vous</span></div>
+      <div class="nav-item" data-page="profile"><div class="nav-icon-wrap"><i data-lucide="user">
+        <div class="icon-box">
+                  <img src="assets/images/../icons/profile.svg" alt="" width="26" height="26" />
+                </div>
+      </i></div><span class="nav-label">Profil</span></div>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="theme-btn" id="theme-btn"><span id="theme-sidebar-icon"><i data-lucide="sun"></i></span><span id="theme-label">Mode Clair</span></button>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-greeting" id="topbar-greeting">Bienvenue sur <strong>DYDY AI</strong></div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="notif-btn" title="Notifications">
+            <div class="icon-box">
+                  <img src="assets/images/../icons/notifi.svg" alt="" width="26" height="26" />
+          </div>
+          <i data-lucide="bell"></i></button>
+        <button class="icon-btn" id="theme-btn-top"><span id="theme-icon-top"><i data-lucide="moon"></i></span></button>
+        <!-- LOGGED OUT: sign-in button -->
+        <button class="btn btn-gold topbar-login-btn" id="topbar-loggedout" onclick="openLoginModal()"><i data-lucide="log-in"></i> Se connecter</button>
+        <!-- LOGGED IN: user chip (hidden until auth) -->
+        <div class="user-chip" id="topbar-loggedin" style="display:none" onclick="navigate('profile')" title="Mon profil">
+          <!-- IMAGE SLOT: Google photo injected here by auth.js -->
+          <div class="user-avatar" id="topbar-avatar">?</div>
+          <span class="user-chip-name" id="topbar-username">—</span>
+          <i data-lucide="chevron-down" style="width:13px;height:13px;color:var(--text-muted)"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGE: HOME -->
+    <div id="page-home" class="page active">
+      <div class="page-header">
+        <div><div class="page-title">Tableau de bord</div><div class="page-subtitle" id="home-date"></div></div>
+        <button class="btn btn-gold" onclick="navigate('dydy')"><i data-lucide="bot"></i> Parler à DYDY</button>
+      </div>
+
+      <div class="action-banner">
+        <div>
+          <div class="banner-eyebrow"><i data-lucide="zap"></i>&nbsp;Prochaine action</div>
+          <div class="banner-title">Contribution REER 2024</div>
+          <div class="banner-sub">Échéance dans 23 jours &nbsp;·&nbsp; Maximum suggéré : 8 500 $</div>
+        </div>
+        <button class="btn btn-gold" onclick="navigate('meetings')"><i data-lucide="calendar-plus"></i> Prendre RDV</button>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="stat-card"><div class="stat-icon-wrap"><i data-lucide="wallet">
+          <div class="icon-box">
+                  <img src="assets/images/../icons/portfolio.svg" alt="" width="26" height="26" />
+                </div>
+        </i></div><div class="stat-label">Valeur totale du portefeuille</div><div class="stat-value">237 450 $</div><div class="stat-badge up"><i data-lucide="trending-up"></i> +5,4% cette année</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap"><i data-lucide="bar-chart-2">
+          <div class="icon-box">
+                  <img src="assets/images/../icons/mbag.svg" alt="" width="40" height="40" />
+                </div>
+        </i></div><div class="stat-label">REER</div><div class="stat-value">148 200 $</div><div class="stat-badge up"><i data-lucide="trending-up"></i> +3,2%</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap blue"><i data-lucide="home">
+          <div class="icon-box">
+                  <img src="assets/images/../icons/family.svg" alt="" width="26" height="26" />
+                </div>
+        </i></div><div class="stat-label">Épargne Maison</div><div class="stat-value">52 000 $</div><div class="stat-badge warn"><i data-lucide="minus"></i> En cours</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap blue"><i data-lucide="shield-check">
+          <div class="icon-box">
+                  <img src="assets/images/../icons/shield.svg" alt="" width="26" height="26" />
+                </div>
+        </i></div><div class="stat-label">Fonds d'urgence</div><div class="stat-value">18 500 $</div><div class="stat-badge ok"><i data-lucide="check"></i> Objectif atteint</div></div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="section-title"><span style="display:flex;align-items:center;gap:7px"><i data-lucide="target"></i> Mes objectifs</span><span class="see-all">Voir tout →</span></div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="goal-item"><div class="goal-header"><span class="goal-name"><i data-lucide="umbrella"></i> Retraite</span><span class="goal-pct">68%</span></div><div class="progress-track"><div class="progress-fill" style="width:68%"></div></div><div class="goal-meta">148 200 $ / 218 000 $ · Cible : 2040</div></div>
+            <div class="goal-item"><div class="goal-header"><span class="goal-name"><i data-lucide="home"></i> Maison</span><span class="goal-pct blue">42%</span></div><div class="progress-track"><div class="progress-fill blue" style="width:42%"></div></div><div class="goal-meta">52 000 $ / 125 000 $ · Cible : 2028</div></div>
+            <div class="goal-item"><div class="goal-header"><span class="goal-name"><i data-lucide="graduation-cap"></i> Éducation enfants</span><span class="goal-pct">25%</span></div><div class="progress-track"><div class="progress-fill" style="width:25%"></div></div><div class="goal-meta">9 800 $ / 40 000 $ · Cible : 2034</div></div>
+          </div>
+        </div>
+        <div class="card-gold">
+          <div class="section-title" style="color:var(--gold-400)"><span style="display:flex;align-items:center;gap:7px"><i data-lucide="bot"></i> Chat avec DYDY</span></div>
+          <p style="font-size:.84rem;color:var(--text-secondary);line-height:1.65;margin-bottom:16px">Un avatar qui parle, répond et vous guide. Intelligence artificielle formée par <strong style="color:var(--text-primary)">Handy Verna</strong>.</p>
+          <div style="background:var(--bg-card-raised);border:1px solid var(--gold-border);border-radius:14px;border-bottom-left-radius:4px;padding:10px 14px;font-size:.82rem;margin-bottom:16px;max-width:88%">Bonjour! Comment puis-je vous aider avec vos finances aujourd'hui?</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="chip" onclick="startDydyChat('Qu\'est-ce qu\'un REER?')" style="border-radius:10px">Qu'est-ce qu'un REER?</button>
+            <button class="chip" onclick="startDydyChat('Comment protéger ma famille?')" style="border-radius:10px">Comment protéger ma famille?</button>
+            <button class="chip" onclick="navigate('meetings')" style="border-radius:10px">Prendre rendez-vous</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESOURCES — each .resource-thumb-placeholder is an image slot -->
+      <div>
+        <div class="section-title"><span style="display:flex;align-items:center;gap:7px"><i data-lucide="book-open"></i> Ressources populaires</span><span class="see-all">Voir tout →</span></div>
+        <div class="resources-grid">
+          <div class="resource-card">
+        <div class="resource-thumb-wrap">
+            <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80"
+                alt="Le guide du REER" class="resource-img" />
+              <div class="resource-thumb-badge">5 min</div>  
+              </div>
+              <div class="resource-body">
+                 <div class="resource-title">Le guide du REER</div>
+                <div class="resource-desc">Tout ce que vous devez savoir...</div>
+                  <div class="resource-time"><i data-lucide="clock"></i> 5 min</div>
+                  </div>
+                      </div>
+          <div class="resource-card">
+            <div class="resource-thumb-wrap">
+            <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=600&q=80"
+                alt="Le guide du REER" class="resource-img" />
+              <div class="resource-thumb-badge">7 min</div>  
+              </div>
+              <div class="resource-body">
+              <div class="resource-title">Assurance vie</div>
+              <div class="resource-desc">Ce que vous devez savoir pour protéger votre famille.</div>
+              <div class="resource-time"><i data-lucide="clock"></i> 7 min</div></div>
+          </div>
+        
+          <div class="resource-card">
+            <div class="resource-thumb-wrap">
+            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&q=80"
+                alt="Le guide du REER" class="resource-img" />
+              <div class="resource-thumb-badge">10 min</div>  
+              </div>
+            <div class="resource-body">
+              <div class="resource-title">Préparer sa retraite</div>
+              <div class="resource-desc">Planifier tôt, vivre mieux. Stratégies pour chaque âge.</div>
+              <div class="resource-time"><i data-lucide="clock"></i> 10 min</div></div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-thumb-wrap">
+            <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&q=80"
+                alt="Le guide du REER" class="resource-img" />
+              <div class="resource-thumb-badge">6 min</div>  
+              </div>
+            <div class="resource-body">
+              <div class="resource-title">CELIAPP — Achat maison</div>
+              <div class="resource-desc">Maximisez votre épargne pour votre première propriété.</div>
+              <div class="resource-time"><i data-lucide="clock"></i> 6 min</div></div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-thumb-wrap">
+            <img src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=600&q=80"
+                alt="Le guide du REER" class="resource-img" />
+              <div class="resource-thumb-badge">4 min</div>  
+              </div>
+            <div class="resource-body">
+              <div class="resource-title">Gérer les dettes</div>
+              <div class="resource-desc">Stratégies d'avalanche et boule de neige expliquées.</div>
+              <div class="resource-time"><i data-lucide="clock"></i> 4 min</div></div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-thumb-wrap">
+            <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=600&q=80"
+                alt="Le guide du REER" class="resource-img" />
+              <div class="resource-thumb-badge">8 min</div>  
+              </div>
+            <div class="resource-body"><div class="resource-title">Investir en bourse</div>
+            <div class="resource-desc">Introduction aux FNB et portefeuilles diversifiés.</div>
+            <div class="resource-time"><i data-lucide="clock"></i> 8 min</div></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-home -->
+
+    <!-- PAGE: MESSAGES -->
+    <div id="page-messages" class="page">
+      <div class="page-header"><div><div class="page-title">Messages</div><div class="page-subtitle">Communiquez directement avec votre conseiller</div></div></div>
+      <div id="messages-auth-prompt" class="card auth-prompt">
+        <i data-lucide="lock" style="width:40px;height:40px;opacity:.35"></i>
+        <h3>Connexion requise</h3>
+        <p>Connectez-vous avec votre compte Google pour accéder à vos messages.</p>
+        <button class="btn-google" onclick="openLoginModal()"><svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/></svg>Continuer avec Google</button>
+      </div>
+      <div id="messages-content" class="msg-layout" style="display:none">
+        <div class="conv-panel">
+          <div class="conv-panel-header">Conversations</div>
+          <div class="search-bar"><i data-lucide="search"></i><input type="text" class="search-input" placeholder="Rechercher…" /></div>
+          <div id="conversations-list">
+            <div class="conv-item active" onclick="openConversation('advisor')">
+              <!-- IMG SLOT: Handy photo. Replace div with <img src="assets/images/handy-headshot.jpg" class="conv-avatar img-slot" data-img-label="Handy photo" style="object-fit:cover"> -->
+              <div class="conv-avatar img-slot" data-img-label="Handy photo" style="background:linear-gradient(135deg,var(--gold-500),var(--blue-500));color:#fff;font-weight:700;font-size:.8rem">HV<div class="online-dot"></div></div>
+              <div style="flex:1;min-width:0"><div class="conv-name">Handy Verna</div><div class="conv-preview">Votre conseiller financier</div></div>
+              <div class="conv-time">Actif</div>
+            </div>
+            <div style="padding:8px 14px 4px;font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);font-weight:700">Notifications</div>
+            <div class="conv-item" onclick="openConversation('notif-reer')"><div class="conv-avatar" style="background:var(--gold-100);color:var(--gold-400)"><i data-lucide="bar-chart-2"></i></div><div style="flex:1;min-width:0"><div class="conv-name">Rappel REER</div><div class="conv-preview">Contribution due dans 23 jours</div></div><div class="conv-time">Auj.</div></div>
+            <div class="conv-item" onclick="openConversation('notif-objectif')"><div class="conv-avatar" style="background:var(--blue-100);color:var(--blue-300)"><i data-lucide="home"></i></div><div style="flex:1;min-width:0"><div class="conv-name">Objectif Maison</div><div class="conv-preview">Progression de 2% ce mois</div></div><div class="conv-time">Hier</div></div>
+          </div>
+        </div>
+        <div class="chat-win">
+          <div class="chat-header">
+            <div class="chat-header-info">
+              <!-- IMG SLOT: replace with <img src="assets/images/handy-headshot.jpg" class="conv-avatar img-slot" data-img-label="Handy photo" style="width:36px;height:36px;object-fit:cover"> -->
+              <div class="conv-avatar img-slot" data-img-label="Handy photo" style="background:linear-gradient(135deg,var(--gold-500),var(--blue-500));color:#fff;font-weight:700;font-size:.8rem;width:36px;height:36px">HV</div>
+              <div><div class="chat-contact-name" id="chat-contact-name">Handy Verna</div><div class="chat-status">● En ligne</div></div>
+            </div>
+            <div style="display:flex;gap:8px"><button class="icon-btn"><i data-lucide="phone"></i></button><button class="icon-btn" onclick="navigate('meetings')"><i data-lucide="calendar"></i></button></div>
+          </div>
+          <div class="chat-messages" id="chat-messages">
+            <div class="msg recv"><div class="conv-avatar" style="background:linear-gradient(135deg,var(--gold-500),var(--blue-500));color:#fff;font-weight:700;font-size:.75rem;width:30px;height:30px;flex-shrink:0">HV</div><div><div class="msg-bubble">Bonjour! Je suis Handy Verna. Comment puis-je vous aider aujourd'hui?</div><div class="msg-time">9h30 · Lu</div></div></div>
+          </div>
+          <div class="chat-input-bar">
+            <textarea class="chat-textarea" id="chat-input" rows="1" placeholder="Écrivez votre message…" onkeydown="handleChatKey(event)" oninput="autoResizeTA(this)"></textarea>
+            <button class="btn btn-gold" style="padding:9px 14px;flex-shrink:0" onclick="sendMessage()"><i data-lucide="send"></i></button>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-messages -->
+
+    <!-- PAGE: DYDY -->
+    <div id="page-dydy" class="page">
+      <div class="page-header"><div><div class="page-title">DYDY <span style="color:var(--gold-400)">AI</span></div><div class="page-subtitle">Votre conseiller financier alimenté par l'intelligence artificielle</div></div><button class="btn btn-outline" onclick="clearDydyChat()"><i data-lucide="trash-2"></i> Effacer</button></div>
+      <div class="dydy-layout">
+        <div class="dydy-header">
+          <!-- IMG SLOT — DYDY PORTRAIT (most important image in the app!)
+               1. Place file at: assets/images/dydy-avatar.jpg
+               2. Replace the .dydy-avatar-icon div below with:
+                  <div class="dydy-avatar-ring">
+                    <img src="assets/images/dydy-avatar.jpg" alt="DYDY AI" />
+                  </div>
+               The .dydy-avatar-ring CSS already applies the spinning
+               gold+blue gradient border animation. -->
+         <div class="dydy-avatar-ring">
+                    <img src="assets/images/dydy-avatar.jpg" alt="DYDY AI" />
+                  </div>
+          <div class="dydy-header-info">
+            <h2>DYDY AI</h2>
+            <div class="dydy-online"><div class="blink-dot"></div> Prêt à vous aider</div>
+            <p>Formé par Handy Verna &nbsp;·&nbsp; Conseiller financier certifié</p>
+          </div>
+        </div>
+        <div class="dydy-messages" id="dydy-messages">
+          <div class="ai-msg">
+            <div class="ai-msg-avatar-icon"><div class="dydy-avatar-ring">
+                    <img src="assets/images/dydy-avatar.jpg" alt="DYDY AI" />
+                  </div></div>
+            <div class="ai-bubble">Bonjour! Je suis DYDY, votre assistant financier IA.<br><br>Je suis ici pour vous aider avec vos questions sur les <strong>REER</strong>, <strong>CELI</strong>, <strong>assurance vie</strong>, <strong>planification de la retraite</strong>, et bien plus encore.<br><br>Comment puis-je vous aider aujourd'hui?</div>
+          </div>
+        </div>
+        <div class="dydy-chips" id="dydy-chips">
+          <button class="chip" onclick="sendDydyMessage('Qu\'est-ce qu\'un REER et comment ça fonctionne?')">REER</button>
+          <button class="chip" onclick="sendDydyMessage('Comment maximiser mon CELI?')">CELI</button>
+          <button class="chip" onclick="sendDydyMessage('Quelle assurance vie me convient?')">Assurance vie</button>
+          <button class="chip" onclick="sendDydyMessage('Comment préparer ma retraite?')">Retraite</button>
+          <button class="chip" onclick="sendDydyMessage('Qu\'est-ce que le CELIAPP?')">CELIAPP</button>
+        </div>
+        <div class="dydy-input-bar">
+          <textarea class="chat-textarea" id="dydy-input" rows="1" placeholder="Posez votre question financière…" onkeydown="handleDydyKey(event)" oninput="autoResizeTA(this)"></textarea>
+          <button class="btn btn-gold" style="padding:9px 14px;flex-shrink:0" id="dydy-send-btn" onclick="sendDydyFromInput()"><i data-lucide="send"></i></button>
+        </div>
+      </div>
+    </div><!-- /page-dydy -->
+
+    <!-- PAGE: MEETINGS -->
+    <div id="page-meetings" class="page">
+      <div class="page-header"><div><div class="page-title">Rendez-vous</div><div class="page-subtitle">Planifiez une rencontre avec Handy Verna</div></div></div>
+      <div class="meetings-grid">
+        <div class="card">
+          <div class="section-title" style="margin-bottom:18px"><span style="display:flex;align-items:center;gap:7px"><i data-lucide="clipboard-list"></i> Réserver une rencontre</span></div>
+          <div class="form-group"><div class="form-label">Type de rencontre</div><div class="type-grid"><div class="type-option selected" data-type="video" onclick="selectMeetingType(this)"><i data-lucide="video"></i><div class="type-label">En ligne</div><div class="type-sub">Zoom / Teams</div></div><div class="type-option" data-type="inperson" onclick="selectMeetingType(this)"><i data-lucide="users"></i><div class="type-label">En personne</div><div class="type-sub">Bureau de Handy</div></div></div></div>
+          <div class="form-group"><label class="form-label">Nom complet</label><input type="text" class="form-input" id="meet-name" placeholder="Ex : Sarah Tremblay" /></div>
+          <div class="form-group"><label class="form-label">Adresse courriel</label><input type="email" class="form-input" id="meet-email" placeholder="sarah@courriel.com" /></div>
+          <div class="form-group"><label class="form-label">Sujet</label><select class="form-select" id="meet-subject"><option value="">Choisir un sujet…</option><option>Revue de mon plan financier</option><option>Contribution REER / CELI</option><option>Assurance vie et invalidité</option><option>Planification de la retraite</option><option>Achat immobilier (CELIAPP)</option><option>Gestion des dettes</option><option>Autre question</option></select></div>
+          <div class="form-group"><label class="form-label">Message (optionnel)</label><textarea class="form-textarea" id="meet-message" placeholder="Décrivez brièvement votre situation…"></textarea></div>
+          <button class="btn btn-gold" style="width:100%;justify-content:center;padding:12px" onclick="bookMeeting()"><i data-lucide="check-circle"></i> Confirmer le rendez-vous</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="card"><div class="section-title" style="margin-bottom:14px"><span style="display:flex;align-items:center;gap:7px"><i data-lucide="calendar"></i> Choisir une date</span></div><div id="mini-calendar"></div></div>
+          <div class="card"><div class="section-title" style="margin-bottom:12px"><span style="display:flex;align-items:center;gap:7px"><i data-lucide="clock"></i> Créneaux disponibles</span></div><div class="time-slots" id="time-slots"><div class="time-slot" onclick="selectTime(this)">9:00</div><div class="time-slot" onclick="selectTime(this)">9:30</div><div class="time-slot unavailable">10:00</div><div class="time-slot" onclick="selectTime(this)">10:30</div><div class="time-slot unavailable">11:00</div><div class="time-slot" onclick="selectTime(this)">11:30</div><div class="time-slot unavailable">13:00</div><div class="time-slot" onclick="selectTime(this)">13:30</div><div class="time-slot" onclick="selectTime(this)">14:00</div><div class="time-slot unavailable">14:30</div><div class="time-slot" onclick="selectTime(this)">15:00</div><div class="time-slot" onclick="selectTime(this)">15:30</div></div></div>
+          <div class="card"><div class="section-title" style="margin-bottom:12px"><span style="display:flex;align-items:center;gap:7px"><i data-lucide="calendar-check"></i> Mes RDV à venir</span></div><div style="display:flex;flex-direction:column;gap:8px" id="upcoming-meetings"><div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-card-raised);border-radius:var(--r-md);border:1px solid var(--card-border)"><div style="background:var(--gold-100);border:1px solid var(--gold-border);border-radius:10px;padding:8px 10px;text-align:center;min-width:46px;flex-shrink:0"><div style="font-size:.58rem;text-transform:uppercase;color:var(--gold-400);font-weight:800">MAI</div><div style="font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800">22</div></div><div style="flex:1"><div style="font-size:.85rem;font-weight:600">Revue REER 2024</div><div style="font-size:.72rem;color:var(--text-muted)">En ligne · 14h00 · 45 min</div></div><button class="btn btn-outline" style="padding:5px 11px;font-size:.73rem">Annuler</button></div></div></div>
+        </div>
+      </div>
+    </div><!-- /page-meetings -->
+
+    <!-- PAGE: PROFILE -->
+    <div id="page-profile" class="page">
+      <div class="page-header"><div><div class="page-title">Mon Profil</div><div class="page-subtitle">Gérez vos informations et paramètres</div></div><button class="btn btn-outline" id="signout-btn" onclick="signOutUser()" style="display:none"><i data-lucide="log-out"></i> Déconnexion</button></div>
+      <div class="profile-layout">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="profile-card-main">
+            <!-- IMG SLOT: Google photo auto-injected by auth.js. No manual swap needed. -->
+            <div class="profile-avatar-lg img-slot" id="profile-avatar-large" data-img-label="User photo (auto — Google login)">?</div>
+            <div class="profile-name" id="profile-name">—</div>
+            <div class="profile-email" id="profile-email">Connectez-vous pour voir votre profil</div>
+            <div class="profile-tag">Client DYDY AI</div>
+            <div class="profile-stats"><div class="profile-stat"><div class="pstat-val">3</div><div class="pstat-label">Objectifs</div></div><div class="profile-stat"><div class="pstat-val">12</div><div class="pstat-label">RDV</div></div><div class="profile-stat"><div class="pstat-val">2 ans</div><div class="pstat-label">Client</div></div></div>
+            <button class="btn-google-full" id="profile-signin-btn" onclick="openLoginModal()"><svg width="17" height="17" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/></svg>Se connecter avec Google</button>
+          </div>
+          <div class="card-gold">
+            <div class="card-label" style="color:var(--gold-400)">Mon Conseiller</div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+              <!-- IMG SLOT: Handy headshot. Replace with <img src="assets/images/handy-headshot.jpg" style="width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--gold-border)"> -->
+              <img src="assets/images/prof.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--gold-border)">
+              <div><div style="font-weight:700;font-family:'Syne',sans-serif;font-size:.95rem">Andy Duboi</div><div style="font-size:.72rem;color:var(--text-muted)">Conseiller Financier Certifié</div><div style="font-size:.68rem;color:var(--gold-400);margin-top:2px;display:flex;align-items:center;gap:4px"><div class="blink-dot"></div> Disponible via DYDY 24/7</div></div>
+            </div>
+            <div style="display:flex;gap:8px"><button class="btn btn-gold" style="flex:1;justify-content:center;font-size:.8rem" onclick="navigate('messages')"><i data-lucide="message-square"></i> Message</button><button class="btn btn-outline" style="flex:1;justify-content:center;font-size:.8rem" onclick="navigate('meetings')"><i data-lucide="calendar"></i> RDV</button></div>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-group"><div class="settings-group-title">Informations personnelles</div><div class="settings-item"><div><div class="settings-item-label">Nom complet</div><div class="settings-item-sub" id="settings-name">—</div></div><button class="btn btn-outline" style="padding:5px 11px;font-size:.73rem">Modifier</button></div><div class="settings-item"><div><div class="settings-item-label">Adresse courriel</div><div class="settings-item-sub" id="settings-email">—</div></div><button class="btn btn-outline" style="padding:5px 11px;font-size:.73rem">Modifier</button></div><div class="settings-item"><div><div class="settings-item-label">Téléphone</div><div class="settings-item-sub">+1 (514) 000-0000</div></div><button class="btn btn-outline" style="padding:5px 11px;font-size:.73rem">Modifier</button></div></div>
+          <div class="settings-group"><div class="settings-group-title">Notifications</div><div class="settings-item"><div><div class="settings-item-label">Rappels de contribution</div><div class="settings-item-sub">REER, CELI et autres échéances</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div><div class="settings-item"><div><div class="settings-item-label">Messages de Handy</div><div class="settings-item-sub">Réponses à vos questions</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div><div class="settings-item"><div><div class="settings-item-label">Mises à jour du portefeuille</div><div class="settings-item-sub">Notifications mensuelles</div></div><button class="toggle" onclick="this.classList.toggle('on')"></button></div></div>
+          <div class="settings-group"><div class="settings-group-title">Apparence</div><div class="settings-item"><div><div class="settings-item-label">Mode sombre</div><div class="settings-item-sub">Thème actuel</div></div><button class="toggle on" id="profile-theme-toggle" onclick="toggleTheme()"></button></div><div class="settings-item"><div><div class="settings-item-label">Langue</div><div class="settings-item-sub">Français (Canada)</div></div><button class="btn btn-outline" style="padding:5px 11px;font-size:.73rem">Changer</button></div></div>
+          <div class="settings-group"><div class="settings-group-title">Sécurité</div><div class="settings-item"><div><div class="settings-item-label">Compte Google</div><div class="settings-item-sub" id="settings-google-status">Non connecté</div></div><button class="btn btn-primary" id="settings-google-btn" style="padding:6px 12px;font-size:.75rem" onclick="openLoginModal()">Connecter</button></div><div class="settings-item" id="signout-row" style="display:none"><div><div class="settings-item-label">Déconnexion</div><div class="settings-item-sub">Quitter la session actuelle</div></div><button class="btn btn-outline" style="padding:6px 12px;font-size:.75rem;border-color:rgba(239,68,68,.3);color:#f87171" onclick="signOutUser()"><i data-lucide="log-out"></i> Déconnecter</button></div></div>
+        </div>
+      </div>
+    </div><!-- /page-profile -->
+
+  </div><!-- /main-content -->
+</div><!-- /app -->
+
+<!-- MOBILE NAV
+     IMG SLOT (optional): replace bot icon in mob-center with
+     <img src="assets/images/dydy-mark.png" style="width:22px;height:22px"> -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <div class="mob-nav-item active" data-page="home" onclick="navigate('home')"><i data-lucide="layout-dashboard"></i><span class="mob-label">Accueil</span></div>
+    <div class="mob-nav-item" data-page="messages" onclick="navigate('messages')"><i data-lucide="message-square"></i><span class="mob-label">Messages</span><span class="mob-badge" id="mobile-badge" style="display:none">0</span></div>
+    <div class="mob-nav-item mob-center" data-page="dydy" onclick="navigate('dydy')"><i data-lucide="bot"></i></div>
+    <div class="mob-nav-item" data-page="meetings" onclick="navigate('meetings')"><i data-lucide="calendar"></i><span class="mob-label">RDV</span></div>
+    <div class="mob-nav-item" data-page="profile" onclick="navigate('profile')"><i data-lucide="user"></i><span class="mob-label">Profil</span></div>
+  </div>
+</nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
+  window.addEventListener('load', () => { if (window.lucide) lucide.createIcons(); });
+  window.autoResizeTA = function(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px'; };
+  window.openLoginModal = function() { document.getElementById('login-modal').classList.add('open'); if(window.lucide) lucide.createIcons(); };
+  window.closeLoginModal = function() { document.getElementById('login-modal').classList.remove('open'); };
+  window.closeLoginIfBackdrop = function(e) { if(e.target===document.getElementById('login-modal')) window.closeLoginModal(); };
+</script>
+<script src="js/app.js" type="module"></script>
+</body>
+</html>
