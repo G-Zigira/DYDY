@@ -56,23 +56,77 @@
   <div class="login-card">
     <button class="login-close" onclick="closeLoginModal()"><i data-lucide="x"></i></button>
 
-    <!-- LOGO — swap wordmark for <img src="assets/images/logo.png"> when ready -->
+    <!-- LOGO -->
     <div class="login-logo">
       <div class="logo-wordmark" style="font-size:2rem"><span class="logo-dydy">DYDY</span><span class="logo-ai">AI</span></div>
       <div class="logo-tagline" style="text-align:center;margin-top:4px">L'avenir du conseil financier</div>
     </div>
 
-    <div class="login-divider-text">Connectez-vous pour continuer</div>
+    <!-- TABS -->
+    <div class="login-tabs">
+      <button class="login-tab active" id="tab-email" onclick="switchLoginTab('email')">Courriel</button>
+      <button class="login-tab" id="tab-google" onclick="switchLoginTab('google')">Google</button>
+    </div>
 
-    <button class="btn-google-full" id="modal-google-btn" onclick="signInWithGoogle()">
-      <svg width="20" height="20" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/></svg>
-      Continuer avec Google
-    </button>
+    <!-- EMAIL/PASSWORD PANEL -->
+    <div id="login-panel-email" class="login-panel">
+      <!-- Sub-tabs: Sign in / Sign up -->
+      <div class="login-subtabs">
+        <button class="login-subtab active" id="subtab-signin" onclick="switchAuthMode('signin')">Se connecter</button>
+        <button class="login-subtab" id="subtab-signup" onclick="switchAuthMode('signup')">Créer un compte</button>
+      </div>
+
+      <div id="signup-name-row" style="display:none">
+        <label class="login-label">Nom complet</label>
+        <input id="login-name" type="text" class="login-input" placeholder="Jean Tremblay" autocomplete="name" />
+      </div>
+
+      <div>
+        <label class="login-label">Adresse courriel</label>
+        <input id="login-email" type="email" class="login-input" placeholder="jean@exemple.com" autocomplete="email" />
+      </div>
+
+      <div>
+        <label class="login-label">Mot de passe</label>
+        <div class="login-input-wrap">
+          <input id="login-password" type="password" class="login-input" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')submitEmailAuth()" />
+          <button class="login-eye-btn" onclick="togglePasswordVisibility()" type="button" tabindex="-1">
+            <i data-lucide="eye" id="eye-icon"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="signup-confirm-row" style="display:none">
+        <label class="login-label">Confirmer le mot de passe</label>
+        <div class="login-input-wrap">
+          <input id="login-confirm" type="password" class="login-input" placeholder="••••••••" autocomplete="new-password" onkeydown="if(event.key==='Enter')submitEmailAuth()" />
+        </div>
+      </div>
+
+      <div id="forgot-row" style="text-align:right;margin-top:-4px">
+        <button class="login-link-btn" onclick="sendPasswordReset()">Mot de passe oublié?</button>
+      </div>
+
+      <div id="login-error" class="login-error" style="display:none"></div>
+
+      <button class="btn-email-full" id="email-submit-btn" onclick="submitEmailAuth()">
+        <span id="email-btn-label">Se connecter</span>
+        <span id="email-btn-spinner" class="login-spinner" style="display:none"></span>
+      </button>
+    </div>
+
+    <!-- GOOGLE PANEL -->
+    <div id="login-panel-google" class="login-panel" style="display:none">
+      <p style="font-size:.82rem;color:var(--text-muted);text-align:center;margin-bottom:18px;line-height:1.6">Connectez-vous avec votre compte Google pour accéder à DYDY AI.</p>
+      <button class="btn-google-full" id="modal-google-btn" onclick="signInWithGoogle()">
+        <svg width="20" height="20" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/></svg>
+        Continuer avec Google
+      </button>
+    </div>
 
     <div class="login-terms">En vous connectant, vous acceptez les <a href="#" style="color:var(--gold-400)">conditions d'utilisation</a> et la <a href="#" style="color:var(--gold-400)">politique de confidentialité</a> de DYDY AI.</div>
 
     <div class="login-advisor-badge">
-      <!-- IMAGE SLOT: swap for <img src="assets/images/handy-headshot.jpg"> -->
       <div class="img-slot" data-img-label="Handy photo" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold-500),var(--blue-500));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:#fff;flex-shrink:0">HV</div>
       <div><div style="font-size:.78rem;font-weight:600">Handy Verna</div><div style="font-size:.68rem;color:var(--text-muted)">Conseiller Financier Certifié · DYDY AI</div></div>
     </div>
@@ -426,15 +480,50 @@
 </div><!-- /app -->
 
 <!-- MOBILE NAV
-     IMG SLOT (optional): replace bot icon in mob-center with
-     <img src="assets/images/dydy-mark.png" style="width:22px;height:22px"> -->
+     Uses the same icon-box pattern as the desktop sidebar.
+     Swap each src="icons/xxx.svg" for your actual icon file paths. -->
 <nav class="mobile-nav">
   <div class="mobile-nav-inner">
-    <div class="mob-nav-item active" data-page="home" onclick="navigate('home')"><i data-lucide="layout-dashboard"></i><span class="mob-label">Accueil</span></div>
-    <div class="mob-nav-item" data-page="messages" onclick="navigate('messages')"><i data-lucide="message-square"></i><span class="mob-label">Messages</span><span class="mob-badge" id="mobile-badge" style="display:none">0</span></div>
-    <div class="mob-nav-item mob-center" data-page="dydy" onclick="navigate('dydy')"><i data-lucide="bot"></i></div>
-    <div class="mob-nav-item" data-page="meetings" onclick="navigate('meetings')"><i data-lucide="calendar"></i><span class="mob-label">RDV</span></div>
-    <div class="mob-nav-item" data-page="profile" onclick="navigate('profile')"><i data-lucide="user"></i><span class="mob-label">Profil</span></div>
+
+    <div class="mob-nav-item active" data-page="home" onclick="navigate('home')">
+      <div class="icon-box">
+        <img src="assets/icons/home.svg" alt="Accueil" />
+      </div>
+      <span class="mob-label">Accueil</span>
+    </div>
+
+    <div class="mob-nav-item" data-page="messages" onclick="navigate('messages')">
+      <div class="icon-box">
+        <img src="assets/icons/msg.svg" alt="Messages" />
+      </div>
+      <span class="mob-label">Messages</span>
+      <span class="mob-badge" id="mobile-badge" style="display:none">0</span>
+    </div>
+
+    <!-- CENTER DYDY BUTTON
+         Uses the facecard portrait image, same as desktop.
+         The mob-center class forces a white filter so it shows
+         on the gold circle background. -->
+    <div class="mob-nav-item mob-center" data-page="dydy" onclick="navigate('dydy')">
+      <div class="icon-box mob-center-icon-box">
+        <img src="assets/images/facecard.jpeg" alt="DYDY" />
+      </div>
+    </div>
+
+    <div class="mob-nav-item" data-page="meetings" onclick="navigate('meetings')">
+      <div class="icon-box">
+        <img src="assets/icons/calender.svg" alt="Rendez-vous" />
+      </div>
+      <span class="mob-label">RDV</span>
+    </div>
+
+    <div class="mob-nav-item" data-page="profile" onclick="navigate('profile')">
+      <div class="icon-box">
+        <img src="assets/icons/profile.svg" alt="Profil" />
+      </div>
+      <span class="mob-label">Profil</span>
+    </div>
+
   </div>
 </nav>
 
@@ -442,9 +531,143 @@
   document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
   window.addEventListener('load', () => { if (window.lucide) lucide.createIcons(); });
   window.autoResizeTA = function(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px'; };
-  window.openLoginModal = function() { document.getElementById('login-modal').classList.add('open'); if(window.lucide) lucide.createIcons(); };
+
+  window.openLoginModal = function() {
+    document.getElementById('login-modal').classList.add('open');
+    // Reset to default state
+    switchLoginTab('email');
+    switchAuthMode('signin');
+    document.getElementById('login-error').style.display = 'none';
+    ['login-email','login-password','login-confirm','login-name'].forEach(id => {
+      const el = document.getElementById(id); if(el) el.value = '';
+    });
+    if(window.lucide) lucide.createIcons();
+  };
+
   window.closeLoginModal = function() { document.getElementById('login-modal').classList.remove('open'); };
   window.closeLoginIfBackdrop = function(e) { if(e.target===document.getElementById('login-modal')) window.closeLoginModal(); };
+
+  window.switchLoginTab = function(tab) {
+    document.getElementById('tab-email').classList.toggle('active', tab==='email');
+    document.getElementById('tab-google').classList.toggle('active', tab==='google');
+    document.getElementById('login-panel-email').style.display = tab==='email' ? 'flex' : 'none';
+    document.getElementById('login-panel-google').style.display = tab==='google' ? 'flex' : 'none';
+  };
+
+  window.switchAuthMode = function(mode) {
+    const isSignup = mode === 'signup';
+    document.getElementById('subtab-signin').classList.toggle('active', !isSignup);
+    document.getElementById('subtab-signup').classList.toggle('active', isSignup);
+    document.getElementById('signup-name-row').style.display    = isSignup ? 'flex' : 'none';
+    document.getElementById('signup-confirm-row').style.display = isSignup ? 'flex' : 'none';
+    document.getElementById('forgot-row').style.display         = isSignup ? 'none' : 'block';
+    document.getElementById('email-btn-label').textContent      = isSignup ? 'Créer mon compte' : 'Se connecter';
+    document.getElementById('login-error').style.display        = 'none';
+    window._authMode = mode;
+    document.getElementById(isSignup ? 'login-name' : 'login-email')?.focus();
+  };
+
+  window._authMode = 'signin';
+
+  window.togglePasswordVisibility = function() {
+    const input = document.getElementById('login-password');
+    const icon  = document.getElementById('eye-icon');
+    const show  = input.type === 'password';
+    input.type  = show ? 'text' : 'password';
+    icon.setAttribute('data-lucide', show ? 'eye-off' : 'eye');
+    if(window.lucide) lucide.createIcons();
+  };
+
+  // ── Email auth — calls Firebase SDK directly (no module timing issue) ──
+  async function _getFirebaseAuth() {
+    const { initializeApp, getApps } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js");
+    const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail } =
+      await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js");
+    // Re-use existing app if already initialised by the module
+    const app  = getApps().length ? getApps()[0] : initializeApp({
+      apiKey:            "AIzaSyC-7SEOkQGcUh_bE0Yc-7M_PZn7BQlEYY0",
+      authDomain:        "dydy-cd8fa.firebaseapp.com",
+      projectId:         "dydy-cd8fa",
+      storageBucket:     "dydy-cd8fa.firebasestorage.app",
+      messagingSenderId: "1055039117357",
+      appId:             "1:1055039117357:web:397d06b1c36fdcc49700a4"
+    });
+    const auth = getAuth(app);
+    return { auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail };
+  }
+
+  window.submitEmailAuth = async function() {
+    const email    = document.getElementById('login-email')?.value.trim();
+    const password = document.getElementById('login-password')?.value;
+    const confirm  = document.getElementById('login-confirm')?.value;
+    const name     = document.getElementById('login-name')?.value.trim();
+    const errEl    = document.getElementById('login-error');
+    const btn      = document.getElementById('email-submit-btn');
+    const spinner  = document.getElementById('email-btn-spinner');
+    const label    = document.getElementById('email-btn-label');
+
+    const showError = msg => { errEl.textContent = msg; errEl.style.display = 'flex'; errEl.style.color = ''; };
+    errEl.style.display = 'none';
+
+    if (!email || !password) { showError('Veuillez remplir tous les champs.'); return; }
+    if (window._authMode === 'signup') {
+      if (!name)                       { showError('Veuillez entrer votre nom.'); return; }
+      if (password.length < 6)         { showError('Le mot de passe doit contenir au moins 6 caractères.'); return; }
+      if (password !== confirm)        { showError('Les mots de passe ne correspondent pas.'); return; }
+    }
+
+    btn.disabled = true; spinner.style.display = 'inline-block'; label.style.opacity = '0.5';
+    try {
+      const { auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } = await _getFirebaseAuth();
+      let user;
+      if (window._authMode === 'signup') {
+        const result = await createUserWithEmailAndPassword(auth, email, password);
+        user = result.user;
+        if (name) await updateProfile(user, { displayName: name });
+        // Reload so displayName is fresh before UI update
+        await user.reload();
+        user = auth.currentUser;
+      } else {
+        const result = await signInWithEmailAndPassword(auth, email, password);
+        user = result.user;
+      }
+      window.closeLoginModal();
+      // Force topbar/profile UI update immediately (don't wait for onAuthStateChanged)
+      if (window.__dydy_updateAuthUI) window.__dydy_updateAuthUI(user);
+    } catch(e) {
+      const msgs = {
+        'auth/user-not-found':       'Aucun compte trouvé pour cet email.',
+        'auth/wrong-password':       'Mot de passe incorrect.',
+        'auth/invalid-credential':   'Email ou mot de passe invalide.',
+        'auth/email-already-in-use': 'Cet email est déjà utilisé.',
+        'auth/weak-password':        'Mot de passe trop faible (min. 6 caractères).',
+        'auth/invalid-email':        'Adresse courriel invalide.',
+        'auth/too-many-requests':    'Trop de tentatives. Réessayez plus tard.',
+      };
+      showError(msgs[e.code] || ('Erreur: ' + e.message));
+    } finally {
+      btn.disabled = false; spinner.style.display = 'none'; label.style.opacity = '1';
+    }
+  };
+
+  window.sendPasswordReset = async function() {
+    const email = document.getElementById('login-email')?.value.trim();
+    const errEl = document.getElementById('login-error');
+    if (!email) {
+      errEl.textContent = "Entrez votre courriel ci-dessus d'abord.";
+      errEl.style.display = 'flex'; errEl.style.color = '';
+      return;
+    }
+    try {
+      const { auth, sendPasswordResetEmail } = await _getFirebaseAuth();
+      await sendPasswordResetEmail(auth, email);
+      errEl.textContent = '✓ Courriel de réinitialisation envoyé!';
+      errEl.style.display = 'flex'; errEl.style.color = '#34d399';
+    } catch(e) {
+      errEl.textContent = 'Erreur: ' + e.message;
+      errEl.style.display = 'flex'; errEl.style.color = '';
+    }
+  };
 </script>
 <script src="js/app.js" type="module"></script>
 </body>

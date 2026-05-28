@@ -2,7 +2,7 @@
 // DYDY AI — App Controller (navigation, theme, init)
 // ============================================================
 import { state }           from './utils/state.js';
-import { loadFirebase, signInWithGoogle, signOutUser, markNotificationsRead } from './services/auth.js';
+import { loadFirebase, signInWithGoogle, signOutUser, markNotificationsRead, signInWithEmail, signUpWithEmail, sendResetEmail } from './services/auth.js';
 import { showToast, formatFrenchDate } from './utils/helpers.js';
 
 // ── Lazy-load page modules ────────────────────────────────
@@ -112,6 +112,9 @@ function init() {
   window.toggleTheme      = toggleTheme;
   window.signInWithGoogle = signInWithGoogle;
   window.signOutUser      = signOutUser;
+  window.signInWithEmail  = signInWithEmail;
+  window.signUpWithEmail  = signUpWithEmail;
+  window.sendResetEmail   = sendResetEmail;
 
   // startDydyChat is defined in dydy.js but called from home page HTML chips.
   // We expose a stub here that lazy-loads the dydy module then calls through.

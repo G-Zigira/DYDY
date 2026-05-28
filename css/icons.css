@@ -331,3 +331,35 @@
 
 [data-theme="dark"]  .resource-thumb-placeholder [data-lucide] { color: var(--gold-400); }
 [data-theme="light"] .resource-thumb-placeholder [data-lucide] { color: var(--blue-400); }
+
+
+/* ── Mobile center button (DYDY portrait) ───────────────────
+   The facecard.jpeg is a photo not a single-colour SVG,
+   so we use object-fit:cover + border-radius instead of filter */
+.mob-center-icon-box {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  /* Remove the filter that would tint the photo */
+}
+
+.mob-center-icon-box img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  border-radius: 50%;
+  /* Override the filter from .mob-nav-item .icon-box img */
+  filter: none !important;
+}
+
+/* Slightly dim when inactive, full brightness when active */
+.mob-nav-item.mob-center .mob-center-icon-box img {
+  opacity: 0.92;
+  transition: opacity 0.2s ease;
+}
+
+.mob-nav-item.mob-center.active .mob-center-icon-box img,
+.mob-nav-item.mob-center:hover .mob-center-icon-box img {
+  opacity: 1;
+}

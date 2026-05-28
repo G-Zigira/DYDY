@@ -13,6 +13,10 @@ export async function loadFirebase() {
     fb.db              = mod.db;
     fb.signIn          = mod.signInWithPopup;
     fb.signOut         = mod.signOut;
+    fb.signInEmail     = mod.signInWithEmailAndPassword;
+    fb.createUser      = mod.createUserWithEmailAndPassword;
+    fb.updateProfile   = mod.updateProfile;
+    fb.resetPassword   = mod.sendPasswordResetEmail;
     fb.collection      = mod.collection;
     fb.addDoc          = mod.addDoc;
     fb.query           = mod.query;
@@ -34,6 +38,10 @@ export async function loadFirebase() {
     });
 
     state.firebaseReady = true;
+
+    // Expose updateAuthUI globally so the inline login script can force a UI refresh
+    window.__dydy_updateAuthUI = updateAuthUI;
+
     return true;
   } catch (e) {
     console.warn('[DYDY] Firebase not configured — fill in js/services/firebase.js', e);
@@ -117,6 +125,34 @@ export async function signInWithGoogle() {
       showToast('Erreur de connexion: ' + e.message, 'error');
     }
   }
+}
+
+export async function signInWithEmail(email, password) {
+  const ok = await loadFirebase();
+  if (!ok) throw new Error('Firebase non configuré');
+  const result = await state.fb.signInEmail(state.fb.auth, email, password);
+  document.getElementById('login-modal')?.classList.remove('open');
+  showToast('Connexion réussie!', 'success');
+  return result;
+}
+
+export async function signUpWithEmail(email, password, displayName) {
+  const ok = await loadFirebase();
+  if (!ok) throw new Error('Firebase non configuré');
+  const result = await state.fb.createUser(state.fb.auth, email, password);
+  if (displayName) {
+    await state.fb.updateProfile(result.user, { displayName });
+  }
+  document.getElementById('login-modal')?.classList.remove('open');
+  showToast('Compte créé avec succès!', 'success');
+  return result;
+}
+
+export async function sendResetEmail(email) {
+  const ok = await loadFirebase();
+  if (!ok) throw new Error('Firebase non configuré');
+  await state.fb.resetPassword(state.fb.auth, email);
+  showToast('Courriel de réinitialisation envoyé!', 'success');
 }
 
 export async function signOutUser() {
